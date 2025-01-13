@@ -120,7 +120,8 @@ print(out)
 # Output Layer
 ###############
 def softmax(a):
-    exp_a = np.exp(a)               # Get each element's exp(a)
-    sum_exp_a = np.sum(exp_a)       # Sum every elements 
+    c = np.max(a)
+    exp_a = np.exp(a - c)               # Get each element's exp(a), (a - c) => Preventing overflow
+    sum_exp_a = np.sum(exp_a)           # Sum every elements 
     y = exp_a / sum_exp_a
     return y
