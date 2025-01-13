@@ -114,3 +114,13 @@ network = create_network()
 inp = ([1.0, 0.5])
 out = forward(network, inp)
 print(out)
+
+
+###############
+# Output Layer
+###############
+def softmax(a):
+    exp_a = np.exp(a)               # Get each element's exp(a)
+    sum_exp_a = np.sum(exp_a)       # Sum every elements 
+    y = exp_a / sum_exp_a
+    return y
