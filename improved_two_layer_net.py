@@ -27,18 +27,47 @@ class TwoLayerNet:
     # x - Image data
     def predict(self, x):
         # Do something...
-        pass
+        for layer in self.layers.values():
+            x = layer.forward(x)
+        return x
     
     # Get loss function's value
     # x - Image data
     # t - Answer label
     def loss(self, x, t):
-        pass
+        y = self.predict(x)
+        return self.lastLayer.forward(y, t)
 
     # Get accuracy
     def accuracy(self, x, t):
-        pass
+        y = self.predict(x)
+        y = np.argmax(y, axis=1)
+        if t.ndim != 1 : t = np.argmax(t, axis=1)
+
+        accuracy = np.sum(y == t) / float(x.shape[0])
+
+        return accuracy
 
     # Get slope with backpropagation
     def gradient(self, x, t):
-        pass
+        # Forward propagation
+        self.loss(x, t)
+
+        # Backward propagation
+        dout = 1
+        dout = self.lastLayer.backward(dout)
+
+        layers = list(self.layers.values())
+        layers.reverse()
+
+        for layer in layers:
+            dout = layer.backward(dout)
+        
+        # Store result
+        grads = {}
+        grads['W1'] = self.layers['Affine1'].dW
+        grads['b1'] = self.layers['Affine1'].db
+        grads['W2'] = self.layers['Affine2'].dW
+        grads['b2'] = self.layers['Affine2'].db
+
+        return grads
